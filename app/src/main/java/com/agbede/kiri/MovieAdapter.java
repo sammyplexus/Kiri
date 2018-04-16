@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.agbede.kiri.models.NowPlayingMovies;
+import com.agbede.kiri.models.Results;
 import com.agbede.kiri.services.MovieService;
 import com.bumptech.glide.Glide;
 
@@ -20,11 +21,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void onClickItem(int position, View itemView);
     }
 
-    NowPlayingMovies movies;
+    ArrayList<Results> results;
     RecyclerViewClickListener listener;
-    public MovieAdapter(NowPlayingMovies movies, RecyclerViewClickListener listener){
-        this.movies = movies;
+    public MovieAdapter(ArrayList<Results> results, RecyclerViewClickListener listener){
+        this.results = results;
         this.listener = listener;
+    }
+
+    public void replace(ArrayList<Results> results){
+        this.results = results;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -39,11 +45,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        NowPlayingMovies.Results results = movies.results.get(position);
+        Results results = this.results.get(position);
         String title = results.getTitle();
         double rating = results.getVote_average();
 
-        String poster_path = movies.results.get(position).getPoster_path().substring(1);
+        String poster_path = results.getPoster_path().substring(1);
         String image = MovieService.Factory.BASE_POSTER_URL + "" + poster_path;
 
         holder.movieTitle.setText(title);
@@ -57,7 +63,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movies == null ? 0 :  movies.results.size();
+        return results == null ? 0 :  results.size();
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
