@@ -15,9 +15,9 @@ public class NowPlayingMovies {
     }
 
     @Expose
-    ArrayList<Results> results;
+    public ArrayList<Results> results;
 
-    class Results {
+    public class Results {
 
         @Expose
         String title;
